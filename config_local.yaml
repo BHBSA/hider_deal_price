@@ -1,0 +1,13 @@
+# local
+mongo:
+    host: 192.168.0.235
+    port: 27017
+    db_name : second_hand
+    coll_comm : deal_price_test_test
+
+# online
+#mongo:
+#    host: 222.73.196.143
+#    port: 27017
+#    db_name : fangjia
+#    coll_comm : deal_price
