@@ -1,3 +1,0 @@
-[submodule "lib"]
-	path = lib
-	url = git@192.168.0.27:DataProduct/lib.git
