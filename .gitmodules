@@ -1,0 +1,3 @@
+[submodule "lib"]
+	path = lib
+	url = http://jijunyu:jijunyu3306@gitlab.fangjia.com/DataProduct/lib.git
