@@ -2,8 +2,6 @@ from deal_price_info import Comm
 import requests
 import re
 from lxml import etree
-import random
-import json
 import time
 import datetime
 from lib.log import LogHandler
@@ -18,17 +16,6 @@ class Leju:
         self.headers = {'User-Agent':
                             'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36',
                         }
-        self.proxies = [
-            {"http": "http://192.168.0.96:3234"},
-            {"http": "http://192.168.0.93:3234"},
-            {"http": "http://192.168.0.90:3234"},
-            {"http": "http://192.168.0.94:3234"},
-            {"http": "http://192.168.0.98:3234"},
-            {"http": "http://192.168.0.99:3234"},
-            {"http": "http://192.168.0.100:3234"},
-            {"http": "http://192.168.0.101:3234"},
-            {"http": "http://192.168.0.102:3234"},
-            {"http": "http://192.168.0.103:3234"}, ]
 
     def start_crawler(self):
         res = requests.get(self.start_url, headers=self.headers)
@@ -47,9 +34,8 @@ class Leju:
         count = 1
         while True:
             page_url = second_comm_url + "n" + str(count)
-            proxy = self.proxies[random.randint(0, 9)]
             try:
-                res = requests.get(page_url, headers=self.headers, proxies=proxy)
+                res = requests.get(page_url, headers=self.headers)
                 if '没有符合条件的结果' in res.text:
                     log.info('无二手小区')
                     break
@@ -83,8 +69,7 @@ class Leju:
                 url = re.sub('#.*', 'n', room_url) + str(i)
                 while True:
                     try:
-                        proxy = self.proxies[random.randint(0, 9)]
-                        res = requests.get(url, headers=self.headers, proxies=proxy)
+                        res = requests.get(url, headers=self.headers)
                         break
                     except:
                         continue

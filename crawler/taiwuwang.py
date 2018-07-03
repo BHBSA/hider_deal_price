@@ -4,17 +4,6 @@ from deal_price_info import Comm
 import random
 import time, datetime
 
-proxy = [{"http": "http://192.168.0.96:3234"},
-         {"http": "http://192.168.0.93:3234"},
-         {"http": "http://192.168.0.90:3234"},
-         {"http": "http://192.168.0.94:3234"},
-         {"http": "http://192.168.0.98:3234"},
-         {"http": "http://192.168.0.99:3234"},
-         {"http": "http://192.168.0.100:3234"},
-         {"http": "http://192.168.0.101:3234"},
-         {"http": "http://192.168.0.102:3234"},
-         {"http": "http://192.168.0.103:3234"}, ]
-
 
 class Taiwuwang:
     def __init__(self):
@@ -27,8 +16,7 @@ class Taiwuwang:
 
             while True:
                 try:
-                    proxy_ = proxy[random.randint(0, 9)]
-                    res = requests.get(url, proxies=proxy_)
+                    res = requests.get(url)
                     if res.status_code == 200:
                         break
                 except Exception as e:
@@ -50,8 +38,7 @@ class Taiwuwang:
                 }
                 while True:
                     try:
-                        proxy_ = proxy[random.randint(0, 9)]
-                        response = requests.request("POST", detail_url, data=payload, headers=headers, proxies=proxy_)
+                        response = requests.request("POST", detail_url, data=payload, headers=headers)
                         if res.status_code == 200:
                             break
                     except Exception as e:

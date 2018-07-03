@@ -1,3 +1,6 @@
+"""
+    中安房网址失效，打不开
+"""
 import requests
 import re
 from deal_price_info import Comm
@@ -6,7 +9,6 @@ import time, datetime
 from lib.log import LogHandler
 
 log = LogHandler('中安房')
-
 url = 'http://deal.zaf.cc/'
 
 

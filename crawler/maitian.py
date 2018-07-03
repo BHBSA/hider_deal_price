@@ -21,16 +21,6 @@ class Maitian():
                             'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36',
                         }
         self.url = 'http://bj.maitian.cn/xqall'
-        self.proxies = [{"http": "http://192.168.0.96:3234"},
-                        {"http": "http://192.168.0.93:3234"},
-                        {"http": "http://192.168.0.90:3234"},
-                        {"http": "http://192.168.0.94:3234"},
-                        {"http": "http://192.168.0.98:3234"},
-                        {"http": "http://192.168.0.99:3234"},
-                        {"http": "http://192.168.0.100:3234"},
-                        {"http": "http://192.168.0.101:3234"},
-                        {"http": "http://192.168.0.102:3234"},
-                        {"http": "http://192.168.0.103:3234"}, ]
 
     def start_crawler(self):
         res = requests.get(self.url, headers=self.headers)
@@ -56,8 +46,7 @@ class Maitian():
                     comm_url = city + temp_url
                     while True:
                         try:
-                            proxy = self.proxies[random.randint(0, 9)]
-                            co_res = requests.get(comm_url, headers=self.headers, proxies=proxy, timeout=10)
+                            co_res = requests.get(comm_url, headers=self.headers, timeout=10)
                             break
                         except:
                             continue

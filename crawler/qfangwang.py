@@ -26,7 +26,10 @@ class Qfangwang():
             city_url_head = re.search('href="(.*?)"', city_str, re.S | re.M).group(1)
             city_url = 'http:' + city_url_head + '/transaction'
             city = re.search('<a.*?>(.*?)<', city_str, re.S | re.M).group(1)
-            self.get_city_info(city_url, city)
+            try:
+                self.get_city_info(city_url, city)
+            except Exception as e:
+                log.info('请求错误，url="{}",e="{}"'.format(url, e))
 
     def get_city_info(self, city_url, city):
         response = requests.get(city_url, headers=self.headers, proxies=self.proxy)
@@ -34,21 +37,24 @@ class Qfangwang():
         area_str = re.search('class="search-area-detail clearfix".*?</ul>', html, re.S | re.M).group()
         area_info_list = re.findall('<a.*?</a>', area_str, re.S | re.M)[1:]
         for i in area_info_list:
-            area_url_head = re.search('href="(.*?)"', i, re.S | re.M).group(1)
-            area = re.search('<a.*?>(.*?)<', i, re.S | re.M).group(1)
-            area_url = city_url.replace('/transaction', '') + area_url_head
-            result = requests.get(area_url, headers=self.headers, proxies=self.proxy)
-            content = result.text
             try:
-                page_html = re.search('class="turnpage_num".*?</p>', content, re.S | re.M).group()
-                page = re.findall('<a.*?>(.*?)<', page_html, re.S | re.M)[-1]
-                if not page:
-                    log.error('小区，source="{}",url="{}",e="{}"'.format('Q房网', area_url, e))
-                for i in range(1, int(page) + 1):
-                    page_url = area_url + '/f' + str(i)
-                    self.get_page_url(page_url, city, area)
+                area_url_head = re.search('href="(.*?)"', i, re.S | re.M).group(1)
+                area = re.search('<a.*?>(.*?)<', i, re.S | re.M).group(1)
+                area_url = city_url.replace('/transaction', '') + area_url_head
+                result = requests.get(area_url, headers=self.headers, proxies=self.proxy)
+                content = result.text
+                try:
+                    page_html = re.search('class="turnpage_num".*?</p>', content, re.S | re.M).group()
+                    page = re.findall('<a.*?>(.*?)<', page_html, re.S | re.M)[-1]
+                    if not page:
+                        log.error('小区，source="{}",url="{}",e="{}"'.format('Q房网', area_url, e))
+                    for i in range(1, int(page) + 1):
+                        page_url = area_url + '/f' + str(i)
+                        self.get_page_url(page_url, city, area)
+                except Exception as e:
+                    log.error('请求错误，source="{}",url="{}",e="{}"'.format('Q房网', area_url, e))
             except Exception as e:
-                log.error('请求错误，source="{}",url="{}",e="{}"'.format('Q房网', area_url, e))
+                log.info('此区域没有数据，url="{}",e="{}"'.format(i, e))
 
     def get_page_url(self, page_url, city, area_):
         response = requests.get(page_url, headers=self.headers, proxies=self.proxy)
