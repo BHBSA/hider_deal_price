@@ -12,7 +12,6 @@ from crawler.woai import Woai
 from crawler.fangtianxia import Fangtianxia
 from multiprocessing import Process
 
-
 if __name__ == '__main__':
     centaline = Centaline()
     fangtianxia = Fangtianxia()
