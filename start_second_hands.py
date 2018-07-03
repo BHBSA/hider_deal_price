@@ -9,7 +9,6 @@ from crawler.maitian import Maitian
 from crawler.qfangwang import Qfangwang
 from crawler.taiwuwang import Taiwuwang
 from crawler.woai import Woai
-from crawler.zhonganfang import Zhonganfang
 from crawler.fangtianxia import Fangtianxia
 from multiprocessing import Process
 
@@ -27,7 +26,6 @@ if __name__ == '__main__':
     qfangwang = Qfangwang()
     taiwuwang = Taiwuwang()
     woai = Woai()
-    zhonganfang = Zhonganfang()
     Process(target=centaline.start_crawler).start()
     Process(target=fangtu.start_crawler).start()
     Process(target=goufangwang.start_crawler).start()
@@ -39,5 +37,4 @@ if __name__ == '__main__':
     Process(target=qfangwang.start_crawler).start()
     Process(target=taiwuwang.start_crawler).start()
     Process(target=woai.start_crawler).start()
-    Process(target=zhonganfang.start_crawler).start()
     Process(target=fangtianxia.start_crawler).start()
