@@ -1,7 +1,7 @@
 # local
 mongo:
     host: 114.80.150.196
-    port: 27017
+    port: 27777
     db_name : second_hand
     coll_comm : deal_price_test_test
 
