@@ -6,10 +6,9 @@ import random
 from lib.log import LogHandler
 import time, datetime
 import json
+
 log = LogHandler('centaline')
-
 source = '中原地产'
-
 
 class Centaline:
     def __init__(self):
@@ -18,16 +17,6 @@ class Centaline:
                             'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36',
                         }
         self.start_url = 'http://www.centaline.com.cn/'
-        self.proxies = [{"http": "http://192.168.0.96:3234"},
-                        {"http": "http://192.168.0.93:3234"},
-                        {"http": "http://192.168.0.90:3234"},
-                        {"http": "http://192.168.0.94:3234"},
-                        {"http": "http://192.168.0.98:3234"},
-                        {"http": "http://192.168.0.99:3234"},
-                        {"http": "http://192.168.0.100:3234"},
-                        {"http": "http://192.168.0.101:3234"},
-                        {"http": "http://192.168.0.102:3234"},
-                        {"http": "http://192.168.0.103:3234"}, ]
 
     def start_crawler(self):
         res = requests.get(self.start_url, headers=self.headers)
@@ -41,34 +30,22 @@ class Centaline:
             page_str = city_html.xpath("//a[@class='fsm fb']/@href")[0]
             page = re.search('\d+', page_str).group(0)
             for i in range(1, int(page) + 1):
-                while True:
-                    try:
-                        proxy = self.proxies[random.randint(0, 9)]
-                        url = city_comm + "g" + str(i)
-                        comm_res = requests.get(url, headers=self.headers, proxies=proxy)
-                        break
-                    except:
-                        continue
+                url = city_comm + "g" + str(i)
+                comm_res = requests.get(url, headers=self.headers)
                 html = etree.HTML(comm_res.text)
                 comm_url_list = html.xpath("//ul/li/div/a/@href")
                 self.comm_detail(comm_url_list, city_comm)
 
     def comm_detail(self, comm_url_list, city):
-
         for comm_url in comm_url_list[1:]:
             try:
                 com_url =  city.replace('/xiaoqu/',comm_url)
                 statecode = re.search('xq-(.*)',comm_url).group(1)
                 code = statecode.upper()
                 comm_detail_url = 'http://sh.centanet.com/apipost/GetDealRecord?estateCode='+code+'&posttype=S&pageindex=1&pagesize=10000'
-                while True:
-                    proxy = self.proxies[random.randint(0, 9)]
-                    try:
-                        com_res = requests.get(com_url,headers=self.headers,proxies=proxy)
-                        res = requests.get(comm_detail_url, headers=self.headers, proxies=proxy)
-                        break
-                    except:
-                        continue
+                com_res = requests.get(com_url,headers=self.headers)
+                res = requests.get(comm_detail_url, headers=self.headers)
+                time.sleep(2)
                 html = etree.HTML(com_res.text)
                 data_dict = json.loads(res.text)
                 district_name = html.xpath("//div/h3/text()")[0]
@@ -87,14 +64,11 @@ class Centaline:
                             co.hall = int(re.search('(\d)厅', room_type, re.S | re.M).group(1))
                         except Exception as e:
                             log.error('roomtype为空'.format(e))
-
                         area = data['areaSize'].replace('平','')
                         if area:
                             area = float(area)
                             co.area = round(area, 2)
-
                         co.direction = data['direction']
-
                         trade_date = '20' + data['dealTime']
                         if trade_date:
                             t = time.strptime(trade_date, "%Y-%m-%d")

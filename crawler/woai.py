@@ -18,16 +18,6 @@ class Woai:
         self.headers = {'User-Agent':
                             'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36',
                         }
-        self.proxies = [{"http": "http://192.168.0.96:3234"},
-                        {"http": "http://192.168.0.93:3234"},
-                        {"http": "http://192.168.0.90:3234"},
-                        {"http": "http://192.168.0.94:3234"},
-                        {"http": "http://192.168.0.98:3234"},
-                        {"http": "http://192.168.0.99:3234"},
-                        {"http": "http://192.168.0.100:3234"},
-                        {"http": "http://192.168.0.101:3234"},
-                        {"http": "http://192.168.0.102:3234"},
-                        {"http": "http://192.168.0.103:3234"}, ]
 
     def start_crawler(self):
         res = requests.get(self.start_url,headers=self.headers)
@@ -61,14 +51,12 @@ class Woai:
             return
 
     def room_info(self,sold_url,co_name,region,city_name,city_url):
-        while True:
-            try:
-                proxy = self.proxies[random.randint(0,9)]
-                room_res = requests.get(sold_url, headers=self.headers,proxies=proxy)
-                break
-            except:
-                continue
-        ro_html = etree.HTML(room_res.text)
+        try:
+            room_res = requests.get(sold_url, headers=self.headers)
+            ro_html = etree.HTML(room_res.text)
+        except Exception as e:
+            log.error(e)
+            return
         try:
             self.info_parse(ro_html,co_name,region,city_name)
             self.page_request(room_res,ro_html,city_url,co_name, region, city_name)
