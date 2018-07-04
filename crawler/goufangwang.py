@@ -41,7 +41,7 @@ class Goufangwang():
                 if not city_name == '天津':
                     list_.append((url, city))
                 else:
-                    log.error('此城市没有数据，city="{}",url="{}"'.format(city, city_url))
+                    log.info('此城市没有数据，city="{}",url="{}"'.format(city, city_url))
             except Exception as e:
                 log.error('请求出错，url={}'.format(city_url))
         return list_
