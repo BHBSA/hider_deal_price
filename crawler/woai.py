@@ -94,7 +94,7 @@ class Woai:
                 trade_date = room.xpath(".//div/p[3]/text()")[0]
                 trade_date = trade_date.strip()
                 if trade_date:
-                    t = time.strptime(trade_date, "签约日期：%Y-%m-%d")
+                    t = time.strptime(trade_date, "成交日期：%Y-%m-%d")
                     y = t.tm_year
                     m = t.tm_mon
                     d = t.tm_mday
