@@ -4,7 +4,8 @@ mongo:
     port: 27777
     db_name : second_hand
     coll_comm : deal_price_test_test
-
+    user_name: 'fangjia'
+    password: 'fangjia123456'
 # online
 #mongo:
 #    host: 192.168.0.43
