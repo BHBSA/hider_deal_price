@@ -9,7 +9,8 @@ from lib.standardization import standard_block, standard_city
 
 log = LogHandler('deal_price_info')
 setting = yaml.load(open('./config_local.yaml'))
-m = Mongo(setting['mongo']['host'], setting['mongo']['port'])
+m = Mongo(setting['mongo']['host'], setting['mongo']['port'], user_name=setting['mongo']['user_name'],
+          password=setting['mongo']['password'])
 db = m.connect[setting['mongo']['db_name']]
 coll = db[setting['mongo']['coll_comm']]
 
