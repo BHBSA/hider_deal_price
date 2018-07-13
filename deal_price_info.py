@@ -39,6 +39,19 @@ def compare(comm_keys):
             raise KeyError
 
 
+class IllegalArgumentException(Exception):
+    """
+        成交数据不合法异常类
+    """
+
+    def __init__(self, err):
+        Exception.__init__(self)
+        self.err = err
+
+    def __str__(self):
+        return self.err
+
+
 class Comm:
     def __init__(self, source, trade_date=None, city=None, region=None, district_name=None,
                  avg_price=None, total_price=None, house_num=None, unit_num=None,
@@ -73,7 +86,11 @@ class Comm:
         city_success, data['city'] = standard_city(data['city'])
         region_success, data['region'] = standard_block(data['city'], data['region'])
 
-        # todo 插入判断
+        try:
+            self.check_data(data)
+        except IllegalArgumentException as e:
+            log.error(e)
+            return
 
         if city_success is False or region_success is False:
             log.error('城市区域数据格式化失败data={}'.format(data))
@@ -85,3 +102,32 @@ class Comm:
 
         else:
             log.info('已经存在数据={}'.format(data))
+
+    def check_data(self, data):
+        """
+        验证成交数据
+        :param data: 字典格式成交数据
+        :return:
+        """
+        if data['city'] is None:    # city字段
+            raise IllegalArgumentException('City is None!')
+
+        if data['region'] is None:  # 区域字段
+            raise IllegalArgumentException('Region is None!')
+
+        if data['district_name'] is None:   # 小区名字段
+            raise IllegalArgumentException('District_name is None!')
+
+        if data['area'] is None or data['area'] < 10 or data['area'] > 1000:    # 房屋面积范围
+            raise IllegalArgumentException('Area is illegal:{}'.format(data['area']))
+
+        if data['total_price'] is None or data['total_price'] <= 10000:     # 总价范围
+            raise IllegalArgumentException('TotalPrice is illegal:{}'.format(data['total_price']))
+
+        if data['avg_price'] is None or data['avg_price']<1000 or data['avg_price']>50*10000:   # 均价范围
+            raise IllegalArgumentException('AvgPrice is illegal:{}'.format(data['avg_price']))
+
+        if data['trade_date'] is None or data['trade_date']<datetime.datetime(2003,1,1)or data['trade_date']>datetime.datetime.now().date():
+            # 成交日期范围
+            raise IllegalArgumentException('TradeDate is illegal:{}'.format(data['trade_date']))
+
