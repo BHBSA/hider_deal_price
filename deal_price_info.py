@@ -109,11 +109,11 @@ class Comm:
         :param data: 字典格式成交数据
         :return:
         """
-        if data['city'] is None:    # city字段
-            raise IllegalArgumentException('City is None!')
-
-        if data['region'] is None:  # 区域字段
-            raise IllegalArgumentException('Region is None!')
+        # if data['city'] is None:    # city字段
+        #     raise IllegalArgumentException('City is None!')
+        #
+        # if data['region'] is None:  # 区域字段
+        #     raise IllegalArgumentException('Region is None!')
 
         if data['district_name'] is None:   # 小区名字段
             raise IllegalArgumentException('District_name is None!')
